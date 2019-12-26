@@ -3,11 +3,20 @@ entries:
   vlibras-video:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2019-12-26T15:49:43.4599471-03:00"
+    created: "2019-12-26T15:58:17.5827418-03:00"
     description: A Helm chart for Kubernetes
-    digest: 1312d1683adc2a85f6b508f063d731c4fca74e4cda210e940345b6ad5c4dcd84
+    digest: 9b7503ccb1cb6c9de63a689d1994945459d185e79c2a6f4d9b4ba4b0a1cc3616
+    name: vlibras-video
+    urls:
+    - https://luizbob.github.io/vlibras-video/vlibras-video-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2019-12-26T15:58:17.5797219-03:00"
+    description: A Helm chart for Kubernetes
+    digest: 2e725cd466ab54fec844aac2fb0ac6158ebbf905e58227c5154985eab910cc60
     name: vlibras-video
     urls:
     - https://luizbob.github.io/vlibras-video/vlibras-video-0.1.0.tgz
     version: 0.1.0
-generated: "2019-12-26T15:49:43.4559545-03:00"
+generated: "2019-12-26T15:58:17.5767314-03:00"
