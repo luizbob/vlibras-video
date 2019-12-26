@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+#kubectl expose deployment video-core --port=80 --type=LoadBalancer
+kind: Deployment
+metadata:
+  name: video-portal
+  labels:
+    app: video-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-portal
+  template:
+    metadata:
+      labels:
+        app: video-portal
+    spec:
+      containers:
+        - image: vlibras/video-portal-teste:03
+          name: video-portal
+          stdin: true
+          tty: true
+ #         resources:
+ #           requests:
+ #             cpu: 600m
+ #             memory: 1.5Gi
+#          volumeMounts:
+#            - name: video-core-nfs
+#              mountPath: /video/
+#      volumes:
+#        - name: video-core-nfs
+#          persistentVolumeClaim:
+#            claimName: test-dynamic-volume-claim

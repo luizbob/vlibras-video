@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vlibras-video-api
+spec:
+  type: LoadBalancer
+  ports:
+    - name: dictionary
+      port: 80
+      protocol: TCP
+  selector:
+    
+    app: vlibras-video-api

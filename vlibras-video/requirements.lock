@@ -1,0 +1,12 @@
+dependencies:
+- name: mongodb
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 7.4.6
+- name: rabbitmq
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 6.12.3
+- name: redis
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 9.0.2
+digest: sha256:28999fa3cc8fd9ff23e5cf37619c8ffce7390ba70cc108f87fb375a891c74445
+generated: "2019-12-26T15:42:06.247091-03:00"

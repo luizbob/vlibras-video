@@ -1,0 +1,98 @@
+apiVersion: extensions/v1beta1
+#kubectl expose deployment dictionaryapi --port=80 --type=LoadBalancer
+#kubectl autoscale deployment dictionaryapi --cpu-percent=70 --min=1 --max=8
+kind: Deployment
+metadata:
+  name: vlibras-video-api
+  labels:
+    app: vlibras-video-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vlibras-video-api
+  template:
+    metadata:
+      labels:
+        app: vlibras-video-api
+    spec:
+      containers:
+        - image: vlibras/video-api-teste:13
+          name: vlibras-video-api
+          env:
+            - name: PORT
+              value: "80"
+            - name: DB_HOST
+              value: "vlibras-video-mongodb"
+            - name: DB_PORT
+              value: "27017"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: vlibras-video-mongodb
+                  key: mongodb-root-password
+            - name: DB_NAME
+              value: "video-api-db"
+            - name: AMQP_USER
+              value: "user"
+            - name: AMQP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: vlibras-video-rabbitmq
+                  key: rabbitmq-password
+            - name: AMQP_HOST
+              value: "vlibras-video-rabbitmq"
+            - name: AMQP_PORT
+              value: "5672"
+            - name: AMQP_PREFETCH_COUNT
+              value: "10"
+            - name: CORE_QUEUE
+              value: "videomaker"
+            - name: LOGIN_UNICO_BASE_URL
+              value: "https://sso.staging.acesso.gov.br"
+            - name: LOGIN_UNICO_CLIENT
+              value: "vlibras.gov.br"
+            - name: LOGIN_UNICO_SECRET
+              value: "AKEqdTQAq3CTGrPuxsrKIWvhZEA0dOcfRNRhmUh48xK-IOJ4fKtJL-rBeRQFs908cl6X1i3T0ota-WNmb8oajQg"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_HOST
+              value: "vlibras-video-redis-master"
+            - name: REDIS_FAMILY
+              value: "4"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vlibras-video-redis
+                  key: redis-password
+            - name: REDIS_DB_INDEX
+              value: "0"
+            - name: PATH_UPLOAD
+              value: "/video/uploads/"
+            - name: GENERATION_TIME_OUT
+              value: "40000000"
+          ports:
+            - containerPort: 80
+              name: vl-vid-port
+#          resources:
+#            requests:
+#              cpu: 1
+#              memory: 2.5Gi
+#            limits:
+#              cpu: 300m
+#              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 20
+          volumeMounts:
+            - name: video-nfs
+              mountPath: /video/
+      volumes:
+        - name: video-nfs
+          persistentVolumeClaim:
+            claimName: nfs-volume    

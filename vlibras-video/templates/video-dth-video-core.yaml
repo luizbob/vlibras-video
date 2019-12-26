@@ -1,0 +1,66 @@
+apiVersion: extensions/v1beta1
+#kubectl expose deployment video-core --port=80 --type=LoadBalancer
+kind: Deployment
+metadata:
+  name: video-core
+  labels:
+    app: video-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-core
+  template:
+    metadata:
+      labels:
+        app: video-core
+    spec:
+      containers:
+        - image: vlibras/video-core-teste:10
+          name: video-core
+          env:
+            - name: DB_HOST
+              value: "vlibras-video-mongodb"
+            - name: DB_PORT
+              value: "27017"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: vlibras-video-mongodb
+                  key: mongodb-root-password
+            - name: DB_NAME
+              value: "video-api-db"
+            - name: AMQP_USER
+              value: "user"
+            - name: AMQP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: vlibras-video-rabbitmq
+                  key: rabbitmq-password
+            - name: AMQP_HOST
+              value: "vlibras-video-rabbitmq"
+            - name: AMQP_PORT
+              value: "5672"
+            - name: AMQP_PREFETCH_COUNT
+              value: "1"
+            - name: CORE_QUEUE
+              value: "videomaker"
+            - name: VLIBRAS_FILES
+              value: "/video/uploads/" 
+            - name: VLIBRAS_DICTIONARY
+              value: "/video/bundles/" 
+          stdin: true
+          tty: true
+          resources:
+            requests:
+              cpu: 1
+              memory: 2.5Gi
+          volumeMounts:
+            - name: video-nfs
+              mountPath: /video/
+      volumes:
+        - name: video-nfs
+          persistentVolumeClaim:
+            claimName: nfs-volume
